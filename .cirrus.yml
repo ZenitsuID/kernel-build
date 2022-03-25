@@ -4,15 +4,15 @@ env:
     BUILD_HOST: CirrusCI
     CIRRUS_CLONE_DEPTH: 1
     CIRRUS_WORKING_DIR: /tmp/cirrus-ci-build
-    ANYKERNEL: "ENCRYPTED[c50b6e61795b346e38fc54857bc9558c6f307bbe65f5e14c69da8dba413142531546318e23e06dc9d18cb4ab2e422852]"
-    TG_TOKEN: "ENCRYPTED[c52965451b2873c4e8b3fafea65f67bdce20d5ed9837e83ba34e43d8be9d27c668150cf268da1f776f749183697ee439]"
-    TG_CHAT_ID: "ENCRYPTED[d38e67b7d7418b20bec787bb8f4ecefc98f3a552c0a2a1587d29a0582616a13e8dcb3ae4cfaf4038708ccbc53cc01644]"
+    ANYKERNEL: "ENCRYPTED[114fd2aa84cd8dca6e52610342e7225ffc28be9fda4dd2cb1ff46df976e3bf9319a31fa37af7614e9f7e246e43a9d971]"
+    TG_TOKEN: "ENCRYPTED[e063ad26221d3a5c3bae7a2af27d6765013cf448f437a2736fff97376d93882026b0b5a64479797e73ff1a65ccecfb9b]"
+    TG_CHAT_ID: "ENCRYPTED[86c6f7f21b00aaba8eb88c4e7b51a03cb1a4d6b258b2c0b14b2f77fbc321dc48ff21b5a17ba3d0940b65ac80d84cc0de]"
     
 task:
   name: "Kernel deploy.."
   timeout_in: 2h
   container:
-      image: anggit86/docker:cirrus
+      image: zenitsuxd/docker:cirrus
       cpu: 8
       memory: 32G
 
