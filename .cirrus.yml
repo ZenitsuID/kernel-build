@@ -1,0 +1,39 @@
+env:
+    DEVICE_CODENAME: lavender
+    BUILD_USER: ZenitsuXD
+    BUILD_HOST: CirrusCI
+    CIRRUS_CLONE_DEPTH: 1
+    CIRRUS_WORKING_DIR: /tmp/cirrus-ci-build
+    ANYKERNEL: "ENCRYPTED[c50b6e61795b346e38fc54857bc9558c6f307bbe65f5e14c69da8dba413142531546318e23e06dc9d18cb4ab2e422852]"
+    TG_TOKEN: "ENCRYPTED[c52965451b2873c4e8b3fafea65f67bdce20d5ed9837e83ba34e43d8be9d27c668150cf268da1f776f749183697ee439]"
+    TG_CHAT_ID: "ENCRYPTED[d38e67b7d7418b20bec787bb8f4ecefc98f3a552c0a2a1587d29a0582616a13e8dcb3ae4cfaf4038708ccbc53cc01644]"
+    
+task:
+  name: "Kernel deploy.."
+  timeout_in: 2h
+  container:
+      image: zenitsuprjkt/docker:latest
+      cpu: 8
+      memory: 32G
+
+  Environment_script:
+      - cat /etc/os*
+      - env
+
+  Spec-Check_script:
+      - ./disk.sh
+  
+  Source_Target_script:
+      - ./target.sh
+
+  Build_kernel_script:
+      - ./clang.sh
+
+  Remove_old_build_script:
+      - ./rm.sh
+
+  Build_kernel_GCC_script:
+      - ./gcc.sh
+
+  Notif_script:
+      - ./done.sh
