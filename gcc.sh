@@ -2,7 +2,7 @@
 
 # Main Declaration
 function env() {
-export KERNEL_NAME=Liquid-Kernel-GCC
+export KERNEL_NAME=Wolf-Kernel-GCC
 KERNEL_ROOTDIR=$CIRRUS_WORKING_DIR/$DEVICE_CODENAME
 DEVICE_DEFCONFIG=lavender-perf_defconfig
 GCC_ROOTDIR=$CIRRUS_WORKING_DIR/GCC64
@@ -44,7 +44,7 @@ cd ${KERNEL_ROOTDIR}
 export KERNEL_USE_CCACHE=1
 tg_post_msg "
 <b>==========================</b>
-<b>Start Building :</b> <code>Liquid Kernel Gcc Version</code>
+<b>Start Building :</b> <code>Wolf Kernel Gcc Version</code>
 <b>Builder Name :</b> <code>$KBUILD_BUILD_USER</code>
 <b>Builder Host :</b> <code>$KBUILD_BUILD_HOST</code>
 <b>==========================</b> "

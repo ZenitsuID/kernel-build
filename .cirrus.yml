@@ -27,10 +27,10 @@ task:
       - ./target.sh
 
   Build_kernel_script:
-  #    - ./clang.sh
+      - ./clang.sh
 
   Remove_old_build_script:
-  #    - ./rm.sh
+      - ./rm.sh
 
   Build_kernel_GCC_script:
       - ./gcc.sh
