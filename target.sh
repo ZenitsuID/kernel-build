@@ -14,4 +14,4 @@ git clone --depth=1 https://github.com/ZenitsuID/kernel_xiaomi_lavender -b caf-h
 # Toolchain
 git clone --depth=1 https://github.com/mvaisakh/gcc-arm64 -b gcc-master $CIRRUS_WORKING_DIR/GCC64
 git clone --depth=1 https://github.com/mvaisakh/gcc-arm -b gcc-master $CIRRUS_WORKING_DIR/GCC32
-git clone --depth=1 https://gitlab.com/ElectroPerf/atom-x-clang.git -b atom-15 $CIRRUS_WORKING_DIR/CLANG
+# git clone --depth=1 https://gitlab.com/ElectroPerf/atom-x-clang.git -b atom-15 $CIRRUS_WORKING_DIR/CLANG
