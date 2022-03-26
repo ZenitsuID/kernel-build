@@ -23,6 +23,13 @@ export BOT_MSG_URL2="https://api.telegram.org/bot$TG_TOKEN"
 # Checking environtment
 # Warning !! Dont Change anything there without known reason.
 function check() {
+echo ================================================
+echo "░██╗░░░░░░░██╗░█████╗░██╗░░░░░███████╗"
+echo "░██║░░██╗░░██║██╔══██╗██║░░░░░██╔════╝"
+echo "░╚██╗████╗██╔╝██║░░██║██║░░░░░█████╗░░"
+echo "░░████╔═████║░██║░░██║██║░░░░░██╔══╝░░"
+echo "░░╚██╔╝░╚██╔╝░╚█████╔╝███████╗██║░░░░░"
+echo "░░░╚═╝░░░╚═╝░░░╚════╝░╚══════╝╚═╝░░░░░"
 echo ==============================================
 echo BUILDER NAME = ${KBUILD_BUILD_USER}
 echo BUILDER HOSTNAME = ${KBUILD_BUILD_HOST}
@@ -42,12 +49,7 @@ tg_post_msg() {
 compile(){
 cd ${KERNEL_ROOTDIR}
 export KERNEL_USE_CCACHE=1
-tg_post_msg "
-<b>==========================</b>
-<b>Start Building :</b> <code>Liquid Kernel Gcc Version</code>
-<b>Builder Name :</b> <code>$KBUILD_BUILD_USER</code>
-<b>Builder Host :</b> <code>$KBUILD_BUILD_HOST</code>
-<b>==========================</b> "
+tg_post_msg "<b>Buiild Kernel Gcc started..</b>"
 make -j$(nproc --all) O=out ARCH=arm64 SUBARCH=arm64 ${DEVICE_DEFCONFIG}
 make -j$(nproc --all) ARCH=arm64 SUBARCH=arm64 O=out \
     CROSS_COMPILE=${GCC_ROOTDIR}/bin/aarch64-elf- \
@@ -73,11 +75,13 @@ function push() {
         -F "parse_mode=html" \
         -F caption="$KERNEL_NAME
 ==========================
-Linux Version : $KERNEL_VERSION
-Sources Branch : $BRANCH
-Top commit : $LATEST_COMMIT
-UTS version : $UTS_VERSION
-Compiler : $TOOLCHAIN_VERSION
+👤 Owner: zenitsu-xd
+🏚️ Linux version: $KERNEL_VERSION
+🌿 Branch: $BRANCH
+🎁 Top commit: $LATEST_COMMIT
+👩‍💻 Commit author: $COMMIT_BY
+🐧 UTS version: $UTS_VERSION
+💡 Compiler: $TOOLCHAIN_VERSION
 ==========================
 Compile took $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s)."
 }

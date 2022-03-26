@@ -1,7 +1,7 @@
 env:
     DEVICE_CODENAME: lavender
-    BUILD_USER: ZenitsuXD
-    BUILD_HOST: CirrusCI
+    BUILD_USER: zenitsu-xd
+    BUILD_HOST: zen-prjkt
     CIRRUS_CLONE_DEPTH: 1
     CIRRUS_WORKING_DIR: /tmp/cirrus-ci-build
     ANYKERNEL: "ENCRYPTED[114fd2aa84cd8dca6e52610342e7225ffc28be9fda4dd2cb1ff46df976e3bf9319a31fa37af7614e9f7e246e43a9d971]"
