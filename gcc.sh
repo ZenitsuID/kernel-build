@@ -2,11 +2,11 @@
 
 # Main Declaration
 function env() {
-export KERNEL_NAME=Wolf-Kernel-GCC-11
+export KERNEL_NAME=Wolf-Kernel-GCC
 KERNEL_ROOTDIR=$CIRRUS_WORKING_DIR/$DEVICE_CODENAME
 DEVICE_DEFCONFIG=lavender-perf_defconfig
-GCC_ROOTDIR=$CIRRUS_WORKING_DIR/GCC-11-64
-GCC_ROOTDIR32=$CIRRUS_WORKING_DIR/GCC-11-32
+GCC_ROOTDIR=$CIRRUS_WORKING_DIR/GCC64
+GCC_ROOTDIR32=$CIRRUS_WORKING_DIR/GCC32
 GCC_VER="$("$GCC_ROOTDIR"/bin/aarch64-elf-gcc --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
 GCC_VER32="$("$GCC_ROOTDIR32"/bin/arm-eabi-gcc --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
 LLD_VER="$("$GCC_ROOTDIR"/bin/ld.lld --version | head -n 1)"
@@ -23,13 +23,6 @@ export BOT_MSG_URL2="https://api.telegram.org/bot$TG_TOKEN"
 # Checking environtment
 # Warning !! Dont Change anything there without known reason.
 function check() {
-echo ================================================
-echo "░██╗░░░░░░░██╗░█████╗░██╗░░░░░███████╗"
-echo "░██║░░██╗░░██║██╔══██╗██║░░░░░██╔════╝"
-echo "░╚██╗████╗██╔╝██║░░██║██║░░░░░█████╗░░"
-echo "░░████╔═████║░██║░░██║██║░░░░░██╔══╝░░"
-echo "░░╚██╔╝░╚██╔╝░╚█████╔╝███████╗██║░░░░░"
-echo "░░░╚═╝░░░╚═╝░░░╚════╝░╚══════╝╚═╝░░░░░"
 echo ==============================================
 echo BUILDER NAME = ${KBUILD_BUILD_USER}
 echo BUILDER HOSTNAME = ${KBUILD_BUILD_HOST}
@@ -48,7 +41,13 @@ tg_post_msg() {
 # Compile
 compile(){
 cd ${KERNEL_ROOTDIR}
-tg_post_msg "<b>Build Kernel GCC Started..</b>"
+export KERNEL_USE_CCACHE=1
+tg_post_msg "
+<b>==========================</b>
+<b>Start Building :</b> <code>Liquid Kernel Gcc Version</code>
+<b>Builder Name :</b> <code>$KBUILD_BUILD_USER</code>
+<b>Builder Host :</b> <code>$KBUILD_BUILD_HOST</code>
+<b>==========================</b> "
 make -j$(nproc --all) O=out ARCH=arm64 SUBARCH=arm64 ${DEVICE_DEFCONFIG}
 make -j$(nproc --all) ARCH=arm64 SUBARCH=arm64 O=out \
     CROSS_COMPILE=${GCC_ROOTDIR}/bin/aarch64-elf- \
@@ -58,9 +57,10 @@ make -j$(nproc --all) ARCH=arm64 SUBARCH=arm64 O=out \
     STRIP=${GCC_ROOTDIR}/bin/aarch64-elf-strip
    if ! [ -a "$IMAGE" ]; then
 	finerr
+	exit 1
    fi
 	git clone --depth=1 $ANYKERNEL $CIRRUS_WORKING_DIR/AnyKernel
-	cp $IMAGE $CIRRUS_WORKING_DIR/AnyKernel
+	cp out/arch/arm64/boot/Image.gz-dtb $CIRRUS_WORKING_DIR/AnyKernel
 }
 # Push kernel to channel
 function push() {
@@ -73,13 +73,11 @@ function push() {
         -F "parse_mode=html" \
         -F caption="$KERNEL_NAME
 ==========================
-👤 Owner: ZenitsuXD
-🏚️ Linux version: $KERNEL_VERSION
-🌿 Branch: $BRANCH
-🎁 Top commit: $LATEST_COMMIT
-👩‍💻 Commit author: $COMMIT_BY
-🐧 UTS version: $UTS_VERSION
-💡 Compiler: $TOOLCHAIN_VERSION
+Linux Version : $KERNEL_VERSION
+Sources Branch : $BRANCH
+Top commit : $LATEST_COMMIT
+UTS version : $UTS_VERSION
+Compiler : $TOOLCHAIN_VERSION
 ==========================
 Compile took $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s)."
 }
