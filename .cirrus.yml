@@ -27,13 +27,16 @@ task:
       - ./target.sh
 
   Build_kernel_script:
-  #    - ./clang.sh
+      - ./clang.sh
+      - ./rm.sh
 
-  Remove_old_build_script:
-  #    - ./rm.sh
-
-  Build_kernel_GCC_script:
+  Build_kernel_GCC_11_script:
       - ./gcc.sh
+      - ./rm.sh
+      
+  Build_kernel_GCC_12_script:
+      - ./gcc12.sh
+      - ./rm.sh
 
   Notif_script:
       - ./done.sh
