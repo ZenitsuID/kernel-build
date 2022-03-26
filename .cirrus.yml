@@ -23,7 +23,7 @@ task:
   Spec-Check_script:
       - ./disk.sh
   
-  Source_Target_script:
+  Sources_Target_script:
       - ./target.sh
 
   Build_kernel_script:
