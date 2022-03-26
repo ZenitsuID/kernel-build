@@ -16,7 +16,7 @@ CLANG_ROOTDIR=$CIRRUS_WORKING_DIR/CLANG
 CLANG_VER="$("$CLANG_ROOTDIR"/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
 LLD_VER="$("$CLANG_ROOTDIR"/bin/ld.lld --version | head -n 1)"
 IMAGE=$CIRRUS_WORKING_DIR/$DEVICE_CODENAME/out/arch/arm64/boot/Image.gz-dtb
-DATE=$(date +"%F-%S")
+DATE=$(date +"%F%S")
 START=$(date +"%s")
 export KBUILD_BUILD_USER=$BUILD_USER
 export KBUILD_BUILD_HOST=$BUILD_HOST
@@ -52,13 +52,19 @@ tg_post_msg() {
 # Compile plox
 compile(){
 cd ${KERNEL_ROOTDIR}
-tg_post_msg "<b>Buiild Kernel Clang started..</b>"
-make -j$(nproc --all) O=out ARCH=arm64 SUBARCH=arm64 ${DEVICE_DEFCONFIG}
-make -j$(nproc --all) ARCH=arm64 SUBARCH=arm64 O=out \
+export KERNEL_USE_CCACHE=1
+tg_post_msg "
+<b>==========================</b>
+<b>Start Building :</b> <code>Liquid Kernel Clang Version</code>
+<b>Builder Name :</b> <code>$KBUILD_BUILD_USER</code>
+<b>Builder Host :</b> <code>$KBUILD_BUILD_HOST</code>
+<b>==========================</b> "
+make -j$(nproc --all) O=out ARCH=arm64 ${DEVICE_DEFCONFIG}
+make -j$(nproc --all) ARCH=arm64 O=out \
     CC=${CLANG_ROOTDIR}/bin/clang \
+    LLVM_AR=${CLANG_ROOTDIR}/bin/llvm-ar \
+    LLVM_DIS=${CLANG_ROOTDIR}/bin/llvm-dis \
     NM=${CLANG_ROOTDIR}/bin/llvm-nm \
-    AR=${CLANG_ROOTDIR}/bin/llvm-ar \
-    AS=${CLANG_ROOTDIR}/bin/llvm-as \
     OBJCOPY=${CLANG_ROOTDIR}/bin/llvm-objcopy \
     OBJDUMP=${CLANG_ROOTDIR}/bin/llvm-objdump \
     STRIP=${CLANG_ROOTDIR}/bin/llvm-strip \
@@ -66,9 +72,10 @@ make -j$(nproc --all) ARCH=arm64 SUBARCH=arm64 O=out \
     CROSS_COMPILE_ARM32=${CLANG_ROOTDIR}/bin/arm-linux-gnueabi-
    if ! [ -a "$IMAGE" ]; then
 	finerr
+	exit 1
    fi
 	git clone --depth=1 $ANYKERNEL $CIRRUS_WORKING_DIR/AnyKernel
-	cp $IMAGE $CIRRUS_WORKING_DIR/AnyKernel
+	cp out/arch/arm64/boot/Image.gz-dtb $CIRRUS_WORKING_DIR/AnyKernel
 }
 # Push kernel to channel
 function push() {
@@ -79,17 +86,15 @@ function push() {
         -F chat_id="$TG_CHAT_ID" \
         -F "disable_web_page_preview=true" \
         -F "parse_mode=html" \
-        -F caption="$KERNEL_NAME
+        -F caption="
 ==========================
-👤 Owner: ZenitsuXD
-🏚️ Linux version: $KERNEL_VERSION
-🌿 Branch: $BRANCH
-🎁 Top commit: $LATEST_COMMIT
-👩‍💻 Commit author: $COMMIT_BY
-🐧 UTS version: $UTS_VERSION
-💡 Compiler: $TOOLCHAIN_VERSION
+Linux Version : $KERNEL_VERSION
+Sources Branch : $BRANCH
+Top commit : $LATEST_COMMIT
+UTS version : $UTS_VERSION
+Compiler : $TOOLCHAIN_VERSION
 ==========================
-Compile took $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s)."
+Compile took : $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s)."
 }
 # Fin Error
 function finerr() {

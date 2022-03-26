@@ -31,8 +31,8 @@ task:
       - ./rm.sh
 
   Build_kernel_GCC_11_script:
-      - ./gcc.sh
-      - ./rm.sh
+  #    - ./gcc.sh
+  #    - ./rm.sh
       
   Build_kernel_GCC_12_script:
   #    - ./gcc12.sh
