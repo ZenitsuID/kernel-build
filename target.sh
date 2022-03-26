@@ -10,7 +10,7 @@
 echo "Downloading Sources Target . . ."
 
 # Kernel Sources
-git clone --depth=1 https://github.com/ZenitsuID/android_kernel_xiaomi_lavender-LTO -b hmp-main $CIRRUS_WORKING_DIR/$DEVICE_CODENAME
+git clone --depth=1 https://github.com/wHo-EM-i/kernel_xiaomi_lavender -b hmp $CIRRUS_WORKING_DIR/$DEVICE_CODENAME
 # Toolchain
 git clone --depth=1 https://github.com/mvaisakh/gcc-arm64 -b gcc-master $CIRRUS_WORKING_DIR/GCC64
 git clone --depth=1 https://github.com/mvaisakh/gcc-arm -b gcc-master $CIRRUS_WORKING_DIR/GCC32
