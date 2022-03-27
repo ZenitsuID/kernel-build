@@ -31,8 +31,8 @@ task:
       - ./rm.sh
 
   Build_kernel_GCC_script:
-  #    - ./gcc.sh
-  #    - ./rm.sh
+      - ./gcc.sh
+      - ./rm.sh
       
   Notif_script:
       - ./done.sh
