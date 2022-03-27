@@ -26,13 +26,13 @@ task:
   Sources_Target_script:
       - ./target.sh
 
-  Build_kernel_script:
-  #    - ./clang.sh
-  #    - ./rm.sh
+  Build_kernel_CLANG_script:
+      - ./clang.sh
+      - ./rm.sh
 
   Build_kernel_GCC_script:
-      - ./gcc.sh
-      - ./rm.sh
+  #    - ./gcc.sh
+  #    - ./rm.sh
       
   Notif_script:
       - ./done.sh
