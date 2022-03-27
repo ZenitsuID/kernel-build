@@ -14,4 +14,4 @@ git clone --depth=1 https://github.com/ZenitsuID/android_kernel_xiaomi_lavender-
 # Toolchain
 #git clone --depth=1 https://github.com/okta-10/gcc-arm64 -b main $CIRRUS_WORKING_DIR/GCC64
 #git clone --depth=1 https://github.com/okta-10/gcc-arm32 -b main $CIRRUS_WORKING_DIR/GCC32
-git clone --depth=1 https://gitlab.com/ImSpiDy/azure-clang.git -b main $CIRRUS_WORKING_DIR/CLANG
+git clone --depth=1 https://gitlab.com/Panchajanya1999/azure-clang.git -b main $CIRRUS_WORKING_DIR/CLANG
