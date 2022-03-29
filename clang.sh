@@ -7,7 +7,9 @@
 # [Mobx Code](https://github.com/mobxprjkt)
 # [NFSDev™](https://github.com/NFS86)
 
+##----------------------------------------------------------------##
 # Main Declaration
+##----------------------------------------------------------------##
 function env() {
 export KERNEL_NAME=Wolf-Kernel-CLANG
 KERNEL_ROOTDIR=$CIRRUS_WORKING_DIR/$DEVICE_CODENAME
@@ -24,8 +26,10 @@ export KBUILD_COMPILER_STRING="$CLANG_VER with $LLD_VER"
 export BOT_MSG_URL="https://api.telegram.org/bot$TG_TOKEN/sendMessage"
 export BOT_MSG_URL2="https://api.telegram.org/bot$TG_TOKEN"
 }
+
+##----------------------------------------------------------------##
 # Checking environtment
-# Warning !! Dont Change anything there without known reason.
+##----------------------------------------------------------------##
 function check() {
 echo ================================================
 echo "░██╗░░░░░░░██╗░█████╗░██╗░░░░░███████╗"
