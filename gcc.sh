@@ -2,7 +2,7 @@
 
 # Main Declaration
 function env() {
-export KERNEL_NAME=Wolf-Kernel-GCC
+export KERNEL_NAME=perf-GCC
 KERNEL_ROOTDIR=$CIRRUS_WORKING_DIR/$DEVICE_CODENAME
 DEVICE_DEFCONFIG=lavender-perf_defconfig
 GCC_ROOTDIR=$CIRRUS_WORKING_DIR/GCC64
@@ -10,26 +10,19 @@ GCC_ROOTDIR32=$CIRRUS_WORKING_DIR/GCC32
 GCC_VER="$("$GCC_ROOTDIR"/bin/aarch64-elf-gcc --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
 GCC_VER32="$("$GCC_ROOTDIR32"/bin/arm-eabi-gcc --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
 LLD_VER="$("$GCC_ROOTDIR"/bin/ld.lld --version | head -n 1)"
-IMAGE=$CIRRUS_WORKING_DIR/$DEVICE_CODENAME/out/arch/arm64/boot/Image.gz-dtb
+IMAGE=$CIRRUS_WORKING_DIR/$DEVICE_CODENAME/out/arch/arm64/boot/Image
 DATE=$(date +"%F-%S")
 START=$(date +"%s")
 export KBUILD_BUILD_USER=$BUILD_USER
 export KBUILD_BUILD_HOST=$BUILD_HOST
 export KBUILD_COMPILER_STRING="$GCC_VER"
 export KBUILD_COMPILER_STRING32="$GCC_VER32  with $LLD_VER"
-export BOT_MSG_URL="https://api.telegram.org/bot$TG_TOKEN/sendMessage"
-export BOT_MSG_URL2="https://api.telegram.org/bot$TG_TOKEN"
+export BOT_MSG_URL="https://api.telegram.org/$TG_TOKEN/sendMessage"
+export BOT_MSG_URL2="https://api.telegram.org/$TG_TOKEN"
 }
 # Checking environtment
 # Warning !! Dont Change anything there without known reason.
 function check() {
-echo ================================================
-echo "░██╗░░░░░░░██╗░█████╗░██╗░░░░░███████╗"
-echo "░██║░░██╗░░██║██╔══██╗██║░░░░░██╔════╝"
-echo "░╚██╗████╗██╔╝██║░░██║██║░░░░░█████╗░░"
-echo "░░████╔═████║░██║░░██║██║░░░░░██╔══╝░░"
-echo "░░╚██╔╝░╚██╔╝░╚█████╔╝███████╗██║░░░░░"
-echo "░░░╚═╝░░░╚═╝░░░╚════╝░╚══════╝╚═╝░░░░░"
 echo ==============================================
 echo BUILDER NAME = ${KBUILD_BUILD_USER}
 echo BUILDER HOSTNAME = ${KBUILD_BUILD_HOST}
@@ -49,7 +42,7 @@ tg_post_msg() {
 compile(){
 cd ${KERNEL_ROOTDIR}
 export KERNEL_USE_CCACHE=1
-tg_post_msg "<b>Buiild Kernel Gcc started..</b>"
+tg_post_msg "<b>Build Kernel GCC Started..</b>"
 make -j$(nproc --all) O=out ARCH=arm64 SUBARCH=arm64 ${DEVICE_DEFCONFIG}
 make -j$(nproc --all) ARCH=arm64 SUBARCH=arm64 O=out \
     CROSS_COMPILE=${GCC_ROOTDIR}/bin/aarch64-elf- \
@@ -62,20 +55,20 @@ make -j$(nproc --all) ARCH=arm64 SUBARCH=arm64 O=out \
 	exit 1
    fi
 	git clone --depth=1 $ANYKERNEL $CIRRUS_WORKING_DIR/AnyKernel
-	cp out/arch/arm64/boot/Image.gz-dtb $CIRRUS_WORKING_DIR/AnyKernel
+	cp $IMAGE $CIRRUS_WORKING_DIR/AnyKernel
 }
 # Push kernel to channel
 function push() {
     cd $CIRRUS_WORKING_DIR/AnyKernel
     zip -r9 $KERNEL_NAME-$DEVICE_CODENAME-${DATE}.zip *
     ZIP=$(echo *.zip)
-    curl -F document=@$ZIP "https://api.telegram.org/bot$TG_TOKEN/sendDocument" \
+    curl -F document=@$ZIP "https://api.telegram.org/$TG_TOKEN/sendDocument" \
         -F chat_id="$TG_CHAT_ID" \
         -F "disable_web_page_preview=true" \
         -F "parse_mode=html" \
         -F caption="$KERNEL_NAME
 ==========================
-👤 Owner: zenitsu-xd
+👤 Owner: AnGgIt86
 🏚️ Linux version: $KERNEL_VERSION
 🌿 Branch: $BRANCH
 🎁 Top commit: $LATEST_COMMIT
@@ -87,11 +80,11 @@ Compile took $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s)."
 }
 # Fin Error
 function finerr() {
-    curl -s -X POST "https://api.telegram.org/bot$TG_TOKEN/sendMessage" \
+    curl -s -X POST "https://api.telegram.org/$TG_TOKEN/sendMessage" \
         -d chat_id="$TG_CHAT_ID" \
         -d "disable_web_page_preview=true" \
         -d "parse_mode=markdown" \
-        -d text="Failed building, Please fix it...!" \
+        -d text="==============================%0A<code>Building Kernel Failed!!!</code>%0A==============================" \
     curl -s -X POST "$BOT_MSG_URL2/sendSticker" \
         -d sticker="CAACAgIAAx0CXjGT1gACDRRhYsUKSwZJQFzmR6eKz2aP30iKqQACPgADr8ZRGiaKo_SrpcJQIQQ" \
         -d chat_id="$TG_CHAT_ID"

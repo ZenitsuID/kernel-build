@@ -1,12 +1,5 @@
 #!/usr/bin/env bash
 
-# Copyright (C) 2022 a zenitsu-prjkt property
-#
-# Thanks for this user:
-# [c3eru](https://github.com/c3eru)
-# [Mobx Code](https://github.com/mobxprjkt)
-# [NFSDev™](https://github.com/NFS86)
-
 export BOT_MSG_URL="https://api.telegram.org/bot$TG_TOKEN/sendMessage"
 export BOT_MSG_URL2="https://api.telegram.org/bot$TG_TOKEN"
 
@@ -23,3 +16,4 @@ cd $CIRRUS_WORKING_DIR
 curl -s -X POST "$BOT_MSG_URL2/sendSticker" \
 -d sticker="CAACAgIAAx0CXjGT1gACAeVg69gXIw-a6h1nvmmaub51tQQwCgACLQMAAsbMYwIquW4nbs0crSAE" \
 -d chat_id="$TG_CHAT_ID"
+tg_post_msg "<b>Building Kernel :</b><code> success</code>%0A<b>Changelog :</b>https://github.com/NFS-projects/kernel_xiaomi_rosy/commits/twelve"
