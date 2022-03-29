@@ -54,8 +54,8 @@ compile(){
 cd ${KERNEL_ROOTDIR}
 export KERNEL_USE_CCACHE=1
 tg_post_msg "<b>Buiild Kernel Clang started..</b>"
-make -j$(nproc --all) O=out ARCH=arm64 ${DEVICE_DEFCONFIG}
-make -j$(nproc --all) ARCH=arm64 O=out \
+make -j$(nproc --all) O=out ARCH=arm64 SUBARCH=arm64 ${DEVICE_DEFCONFIG}
+make -j$(nproc --all) ARCH=arm64 SUBARCH=arm64 O=out \
     CC=${CLANG_ROOTDIR}/bin/clang \
     LLVM_AR=${CLANG_ROOTDIR}/bin/llvm-ar \
     LLVM_DIS=${CLANG_ROOTDIR}/bin/llvm-dis \
@@ -70,7 +70,7 @@ make -j$(nproc --all) ARCH=arm64 O=out \
 	exit 1
    fi
 	git clone --depth=1 $ANYKERNEL $CIRRUS_WORKING_DIR/AnyKernel
-	cp out/arch/arm64/boot/Image.gz-dtb $CIRRUS_WORKING_DIR/AnyKernel
+	cp $IMAGE $CIRRUS_WORKING_DIR/AnyKernel
 }
 # Push kernel to channel
 function push() {
