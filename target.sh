@@ -12,6 +12,6 @@ echo "Downloading Sources Target . . ."
 # Kernel Sources
 git clone --depth=1 https://github.com/ZenitsuID/kernel_xiaomi_lavender -b oldcam-hmp $CIRRUS_WORKING_DIR/$DEVICE_CODENAME
 # Toolchain 
-git clone --depth=1 https://github.com/okta-10/gcc-arm64 -b main $CIRRUS_WORKING_DIR/GCC64
-git clone --depth=1 https://github.com/okta-10/gcc-arm32 -b main $CIRRUS_WORKING_DIR/GCC32
-git clone --depth=1 https://gitlab.com/Panchajanya1999/azure-clang.git -b main $CIRRUS_WORKING_DIR/CLANG
+# git clone --depth=1 https://github.com/okta-10/gcc-arm64 -b main $CIRRUS_WORKING_DIR/GCC64
+# git clone --depth=1 https://github.com/okta-10/gcc-arm32 -b main $CIRRUS_WORKING_DIR/GCC32
+git clone --depth=1 https://gitlab.com/Panchajanya1999/azure-clang.git $CIRRUS_WORKING_DIR/CLANG
