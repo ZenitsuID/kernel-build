@@ -21,18 +21,18 @@ task:
       - env
 
   Spec-Check_script:
-      - bash disk.sh
+      - ./disk.sh
   
   Sync_script:
-      - bash download.sh
+      - ./download.sh
 
   Build_kernel_Clang_script:
-#      - ./clang.sh
-#      - ./rm.sh
+      - ./clang.sh
+      - ./rm.sh
 
   Build_kernel_GCC_script:
-     - bash gcc.sh
-     - bash rm.sh
+     - ./gcc.sh
+     - ./rm.sh
 
   Notif_script:
-      - bash done.sh
+      - ./done.sh
