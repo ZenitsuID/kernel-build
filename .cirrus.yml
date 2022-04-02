@@ -27,8 +27,8 @@ task:
       - ./download.sh
 
   Build_kernel_Clang_script:
-      - ./clang.sh
-      - ./rm.sh
+#      - ./clang.sh
+#      - ./rm.sh
 
   Build_kernel_GCC_script:
      - ./gcc.sh
