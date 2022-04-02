@@ -12,7 +12,7 @@ task:
   name: "Kernel deploy.."
   timeout_in: 2h
   container:
-      image: zenitsuprjkt/docker:latest
+      image: anggit86/docker:cirrus
       cpu: 8
       memory: 32G
 
@@ -27,7 +27,7 @@ task:
       - ./download.sh
 
   Build_kernel_Clang_script:
-#      - ./clang.sh
+#      - bash clang.sh
 #      - ./rm.sh
 
   Build_kernel_GCC_script:
