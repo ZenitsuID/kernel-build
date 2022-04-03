@@ -2,7 +2,7 @@
 
 # Main Declaration
 function env() {
-export KERNEL_NAME=perf-CLANG
+export KERNEL_NAME=Wolf-CLANG
 KERNEL_ROOTDIR=$CIRRUS_WORKING_DIR/$DEVICE_CODENAME
 DEVICE_DEFCONFIG=lavender-perf_defconfig
 CLANG_ROOTDIR=$CIRRUS_WORKING_DIR/CLANG
@@ -14,12 +14,21 @@ START=$(date +"%s")
 export KBUILD_BUILD_USER=$BUILD_USER
 export KBUILD_BUILD_HOST=$BUILD_HOST
 export KBUILD_COMPILER_STRING="$CLANG_VER with $LLD_VER"
-export BOT_MSG_URL="https://api.telegram.org/$TG_TOKEN/sendMessage"
-export BOT_MSG_URL2="https://api.telegram.org/$TG_TOKEN"
+export BOT_MSG_URL="https://api.telegram.org/bot$TG_TOKEN/sendMessage"
+export BOT_MSG_URL2="https://api.telegram.org/bot$TG_TOKEN"
 }
 # Checking environtment
 # Warning !! Dont Change anything there without known reason.
 function check() {
+echo ================================================
+echo "              _  __  ____  ____               "
+echo "             / |/ / / __/ / __/               "
+echo "      __    /    / / _/  _\ \    __           "
+echo "     /_/   /_/|_/ /_/   /___/   /_/           "
+echo "    ___  ___  ____     _________________      "
+echo "   / _ \/ _ \/ __ \__ / / __/ ___/_  __/      "
+echo "  / ___/ , _/ /_/ / // / _// /__  / /         "
+echo " /_/  /_/|_|\____/\___/___/\___/ /_/          "
 echo ================================================
 echo BUILDER NAME = ${KBUILD_BUILD_USER}
 echo BUILDER HOSTNAME = ${KBUILD_BUILD_HOST}
@@ -38,14 +47,13 @@ tg_post_msg() {
 # Compile
 compile(){
 cd ${KERNEL_ROOTDIR}
-export KERNEL_USE_CCACHE=1
 tg_post_msg "<b>Buiild Kernel Clang started..</b>"
 make -j$(nproc --all) O=out ARCH=arm64 SUBARCH=arm64 ${DEVICE_DEFCONFIG}
 make -j$(nproc --all) ARCH=arm64 SUBARCH=arm64 O=out \
     CC=${CLANG_ROOTDIR}/bin/clang \
-    LLVM_AR=${CLANG_ROOTDIR}/bin/llvm-ar \
-    LLVM_DIS=${CLANG_ROOTDIR}/bin/llvm-dis \
     NM=${CLANG_ROOTDIR}/bin/llvm-nm \
+    AR=${CLANG_ROOTDIR}/bin/llvm-ar \
+    AS=${CLANG_ROOTDIR}/bin/llvm-as \
     OBJCOPY=${CLANG_ROOTDIR}/bin/llvm-objcopy \
     OBJDUMP=${CLANG_ROOTDIR}/bin/llvm-objdump \
     STRIP=${CLANG_ROOTDIR}/bin/llvm-strip \
@@ -53,7 +61,6 @@ make -j$(nproc --all) ARCH=arm64 SUBARCH=arm64 O=out \
     CROSS_COMPILE_ARM32=${CLANG_ROOTDIR}/bin/arm-linux-gnueabi-
    if ! [ -a "$IMAGE" ]; then
 	finerr
-	exit 1
    fi
 	git clone --depth=1 $ANYKERNEL $CIRRUS_WORKING_DIR/AnyKernel
 	cp $IMAGE $CIRRUS_WORKING_DIR/AnyKernel
@@ -63,13 +70,13 @@ function push() {
     cd $CIRRUS_WORKING_DIR/AnyKernel
     zip -r9 $KERNEL_NAME-$DEVICE_CODENAME-${DATE}.zip *
     ZIP=$(echo *.zip)
-    curl -F document=@$ZIP "https://api.telegram.org/$TG_TOKEN/sendDocument" \
+    curl -F document=@$ZIP "https://api.telegram.org/bot$TG_TOKEN/sendDocument" \
         -F chat_id="$TG_CHAT_ID" \
         -F "disable_web_page_preview=true" \
         -F "parse_mode=html" \
         -F caption="$KERNEL_NAME
 ==========================
-👤 Owner: yoviie
+👤 Owner: ZenitsuXD
 🏚️ Linux version: $KERNEL_VERSION
 🌿 Branch: $BRANCH
 🎁 Top commit: $LATEST_COMMIT
@@ -81,11 +88,10 @@ Compile took $(($DIFF / 60)) minute(s) and $(($DIFF % 60)) second(s)."
 }
 # Fin Error
 function finerr() {
-    curl -s -X POST "https://api.telegram.org/bot$TG_TOKEN/sendMessage" \
-        -d chat_id="$TG_CHAT_ID" \
-        -d "disable_web_page_preview=true" \
-        -d "parse_mode=markdown" \
-        -d text="================================%0A<code>Building Kernel Gagal...</code>%0A================================" \
+    curl -s -X POST "$BOT_MSG_URL" -d chat_id="$TG_CHAT_ID" \
+	    -d "disable_web_page_preview=true" \
+	    -d "parse_mode=html" \
+        -d text="==============================%0A<b>    Building Kernel CLANG Failed [❌]</b>%0A==============================" \
     curl -s -X POST "$BOT_MSG_URL2/sendSticker" \
         -d sticker="CAACAgIAAx0CXjGT1gACDRRhYsUKSwZJQFzmR6eKz2aP30iKqQACPgADr8ZRGiaKo_SrpcJQIQQ" \
         -d chat_id="$TG_CHAT_ID"

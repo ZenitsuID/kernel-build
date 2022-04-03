@@ -27,12 +27,12 @@ task:
       - ./download.sh
 
   Build_kernel_Clang_script:
-#      - bash clang.sh
-#      - ./rm.sh
+      - ./clang.sh
+      - ./rm.sh
 
   Build_kernel_GCC_script:
      - ./gcc.sh
      - ./rm.sh
 
   Notif_script:
-      - ./done.sh
+#      - ./done.sh
